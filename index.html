@@ -626,35 +626,10 @@
       <div class="welcome-text" id="welcome-display">What would you like to do?</div>
       
       <div class="btn-grid">
-        <button class="btn btn-primary" onclick="location.href='/ai/'">AI Chatbot</button>
-        <button class="btn btn-primary" onclick="location.href='/games/'">Game Page</button>
+        <button class="btn btn-primary" onclick="location.href='/ai/'">⚡ AI Chatbot</button>
+        <button class="btn btn-primary" onclick="location.href='/games/'">🎮 Ultra Games</button>
         <button class="btn btn-secondary" onclick="logout()">Logout</button>
       </div>
-    </div>
-  </div>
-
-  <!-- AI CHATBOT PAGE -->
-  <div class="page hidden" id="ai-page">
-    <div class="page-content">
-      <div class="page-title">AI Chatbot</div>
-      <div class="chatbox" id="chatbox">
-        <div class="chat-msg ai">👋 Hey! How can I help you today?</div>
-      </div>
-      <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-        <input id="chatmsg" type="text" class="form-input" placeholder="Type your message..." style="margin: 0;">
-        <button class="btn btn-primary" onclick="addChat()" style="flex: 0 0 auto; width: auto; padding: 14px 24px;">Send</button>
-      </div>
-      <button class="btn btn-secondary" style="width: 100%;" onclick="showPage('home-page')">← Back to Home</button>
-    </div>
-  </div>
-
-  <!-- GAME PAGE -->
-  <div class="page hidden" id="game-page">
-    <div class="page-content">
-      <div class="page-title">Game Page</div>
-      <div class="page-text">🎮 Add your games and content here</div>
-      <p class="page-text" style="font-size: 0.95em; color: #707080;">Customize this section for your game list, emulators, or anything you'd like to showcase.</p>
-      <button class="btn btn-secondary" style="width: 100%;" onclick="showPage('home-page')">← Back to Home</button>
     </div>
   </div>
 
@@ -687,6 +662,14 @@
       document.getElementById(id).classList.remove('hidden');
     }
 
+    // Set authentication cookie
+    function setAuthCookie() {
+      const expiresDate = new Date();
+      expiresDate.setTime(expiresDate.getTime() + (24 * 60 * 60 * 1000)); // 24 hours
+      const expires = "expires=" + expiresDate.toUTCString();
+      document.cookie = "ubg_auth=true; " + expires + "; path=/; SameSite=Strict";
+    }
+
     // Check password
     function checkPw() {
       const input = document.getElementById('pw');
@@ -694,6 +677,7 @@
       if (input.value === PASSWORD) {
         msg.innerText = '';
         input.value = '';
+        setAuthCookie();
         showPage('create-account-page');
       } else {
         msg.innerText = '❌ Incorrect password';
@@ -738,40 +722,16 @@
 
     // Logout
     function logout() {
+      // Clear auth cookie
+      document.cookie = "ubg_auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Strict;";
       document.getElementById('welcome-display').innerText = 'What would you like to do?';
       showPage('login-page');
     }
 
-    // Simple chatbot
-    const aiReplies = [
-      "That's awesome! Tell me more 🚀",
-      "I'm here to help! 💡",
-      "Sounds interesting! 🌟",
-      "Got it! What else? 🎯",
-      "UBG ULTRA is amazing! ✨"
-    ];
-
-    function addChat() {
-      const cb = document.getElementById('chatbox');
-      const msgEl = document.getElementById('chatmsg');
-      const userMsg = msgEl.value.trim();
-      if (!userMsg) return;
-      
-      cb.innerHTML += `<div class="chat-msg user">${userMsg}</div>`;
-      msgEl.value = '';
-      cb.scrollTop = cb.scrollHeight;
-
-      setTimeout(() => {
-        const reply = aiReplies[Math.floor(Math.random() * aiReplies.length)];
-        cb.innerHTML += `<div class="chat-msg ai">${reply}</div>`;
-        cb.scrollTop = cb.scrollHeight;
-      }, 600);
-    }
-
-    // Allow Enter key to send chat
+    // Allow Enter key for password form
     document.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter' && document.getElementById('chatmsg') === document.activeElement) {
-        addChat();
+      if (e.key === 'Enter' && document.getElementById('pw') === document.activeElement) {
+        checkPw();
       }
     });
 
