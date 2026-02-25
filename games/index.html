@@ -685,7 +685,7 @@
             // Load game directly via iframe src — much more reliable than doc.write().
             // The browser handles relative paths, scripts, and modules natively.
             // The SW or Cache API can still serve cached responses for offline.
-            const gameUrl = `/CODE/games/gn/${encodeURIComponent(game.folder)}/`;
+            const gameUrl = `/games/${encodeURIComponent(game.folder)}/`;
             frame.src = gameUrl;
         }
 
