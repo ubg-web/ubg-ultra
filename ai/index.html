@@ -144,129 +144,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    /* Tabs */
-    .tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-      border-bottom: 1px solid rgba(127, 90, 240, 0.2);
-    }
-
-    .tab-btn {
-      flex: 1;
-      padding: 10px 12px;
-      background: transparent;
-      border: none;
-      color: #a0b0c0;
-      font-weight: 600;
-      font-size: 0.9em;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: all 0.3s;
-    }
-
-    .tab-btn.active {
-      color: #7f5af0;
-      border-bottom-color: #7f5af0;
-    }
-
-    .tab-btn:hover {
-      color: #36cce4;
-    }
-
-    /* Tab content */
-    .tab-content {
-      display: none;
-      flex: 1;
-      overflow-y: auto;
-    }
-
-    .tab-content.active {
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Settings tab */
-    .settings-form {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .form-group {
-      text-align: left;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.9em;
-      font-weight: 500;
-      color: #a0b0c0;
-      margin-bottom: 6px;
-      letter-spacing: 0.2px;
-    }
-
-    .form-group textarea,
-    .form-group input {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1.5px solid rgba(127, 90, 240, 0.3);
-      border-radius: 10px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.9em;
-      color: #fff;
-      background: rgba(255, 255, 255, 0.05);
-      transition: all 0.3s;
-      outline: none;
-      resize: vertical;
-      min-height: 80px;
-    }
-
-    .form-group textarea::placeholder,
-    .form-group input::placeholder {
-      color: #707080;
-    }
-
-    .form-group textarea:focus,
-    .form-group input:focus {
-      border-color: #7f5af0;
-      box-shadow: 0 0 0 3px rgba(127, 90, 240, 0.2);
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .settings-hint {
-      font-size: 0.8em;
-      color: #707080;
-      margin-top: 4px;
-      line-height: 1.4;
-    }
-
-    .save-btn {
-      padding: 10px 16px;
-      background: linear-gradient(120deg, #7f5af0 0%, #36cce4 100%);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 0.9em;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-top: 8px;
-    }
-
-    .save-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(127, 90, 240, 0.3);
-    }
-
-    .save-feedback {
-      font-size: 0.85em;
-      color: #36cce4;
-      margin-top: 8px;
+      margin-bottom: 24px;
       text-align: center;
     }
 
@@ -277,7 +155,7 @@
       padding: 16px;
       margin-bottom: 16px;
       min-height: 200px;
-      max-height: 300px;
+      max-height: 350px;
       overflow-y: auto;
       border: 1px solid rgba(127, 90, 240, 0.2);
       flex: 1;
@@ -399,15 +277,14 @@
       font-size: 0.9em;
       margin-top: 8px;
       text-align: center;
+      min-height: 20px;
     }
 
     @media (max-width: 540px) {
       .page { padding: 30px 16px; }
-      .page-content { padding: 30px 20px; border-radius: 16px; }
-      .page-title { font-size: 1.8em; margin-bottom: 16px; }
+      .page-content { padding: 40px 24px; border-radius: 16px; }
+      .page-title { font-size: 1.8em; }
       .chatbox { min-height: 150px; max-height: 250px; }
-      .form-group textarea,
-      .form-group input { min-height: 60px; }
     }
   </style>
 </head>
@@ -424,48 +301,26 @@
     <div class="page-content">
       <div class="page-title">⚡ ULTRA AI</div>
       
-      <!-- Tabs -->
-      <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('chat')">💬 Chat</button>
-        <button class="tab-btn" onclick="switchTab('settings')">⚙️ Settings</button>
+      <div class="chatbox" id="chatbox">
+        <div class="chat-msg ai">👋 Hey! I'm ULTRA AI. How can I help you today?</div>
       </div>
 
-      <!-- CHAT TAB -->
-      <div id="chat" class="tab-content active">
-        <div class="chatbox" id="chatbox">
-          <div class="chat-msg ai">👋 Hey! I'm ULTRA AI. How can I help you today?</div>
-        </div>
-
-        <div class="input-container">
-          <input id="chatmsg" type="text" class="form-input" placeholder="Type your message..." autocomplete="off">
-          <button id="send-btn" class="btn btn-primary" onclick="sendMessage()">Send</button>
-        </div>
-
-        <div id="error-display" class="error-msg"></div>
+      <div class="input-container">
+        <input id="chatmsg" type="text" class="form-input" placeholder="Type your message..." autocomplete="off">
+        <button id="send-btn" class="btn btn-primary" onclick="sendMessage()">Send</button>
       </div>
 
-      <!-- SETTINGS TAB -->
-      <div id="settings" class="tab-content">
-        <div class="settings-form">
-          <div class="form-group">
-            <label for="system-prompt">System Prompt</label>
-            <textarea id="system-prompt" placeholder="Enter your custom system prompt here. This will guide the AI's behavior and responses."></textarea>
-            <div class="settings-hint">Tip: Use clear instructions like 'You are a helpful assistant' or 'You are a game expert'</div>
-          </div>
-
-          <button class="save-btn" onclick="saveSettings()">💾 Save Settings</button>
-          <div id="save-feedback" class="save-feedback"></div>
-        </div>
-      </div>
+      <div id="error-display" class="error-msg"></div>
 
       <button class="btn btn-secondary" onclick="location.href='/'">← Back to Home</button>
     </div>
   </div>
 
   <script>
-    // CONFIGURATION - HARDCODE YOUR KEY PARTS HERE
-    const KEY_PART_1 = 'gsk_448IhOYDRrJz5iEGs8Hy';
-    const KEY_PART_2 = 'WGdyb3FYlaecMjxGXdgDMv5wpzXa7mc6';
+    // HARDCODED CONFIGURATION
+    const KEY_PART_1 = 'gsk_448IhOYDRrJz5iEGs8HyWGdyb3FYlaec';
+    const KEY_PART_2 = 'MjxGXdgDMv5wpzXa7mc6';
+    const SYSTEM_PROMPT = 'You are ULTRA AI, a helpful assistant from UBG ULTRA. You are intelligent, friendly, and always refer to yourself as ULTRA AI. Keep responses concise and helpful. Never refer to yourself as ChatGPT or any other AI. You will say you are Ultra AI built by Divine X UBG.';
 
     const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
     const MODEL = 'mixtral-8x7b-32768';
@@ -486,44 +341,8 @@
       }
     }
 
-    // Tab switching
-    function switchTab(tabName) {
-      document.querySelectorAll('.tab-content').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('active');
-      });
-      
-      document.getElementById(tabName).classList.add('active');
-      event.target.classList.add('active');
-    }
-
     // Initialize
     generateStars();
-    loadSettings();
-
-    function loadSettings() {
-      const storedPrompt = localStorage.getItem('system_prompt');
-      if (storedPrompt) {
-        document.getElementById('system-prompt').value = storedPrompt;
-      }
-    }
-
-    function saveSettings() {
-      const systemPrompt = document.getElementById('system-prompt').value.trim();
-
-      if (systemPrompt) {
-        localStorage.setItem('system_prompt', systemPrompt);
-      }
-
-      const feedback = document.getElementById('save-feedback');
-      feedback.innerText = '✅ Settings saved!';
-      setTimeout(() => {
-        feedback.innerText = '';
-      }, 3000);
-    }
 
     async function sendMessage() {
       const input = document.getElementById('chatmsg');
@@ -545,7 +364,6 @@
 
       try {
         const messages = getConversationHistory(userMsg);
-        const systemPrompt = localStorage.getItem('system_prompt') || 'You are a helpful assistant.';
 
         const response = await fetch(API_URL, {
           method: 'POST',
@@ -556,7 +374,7 @@
           body: JSON.stringify({
             model: MODEL,
             messages: [
-              { role: 'system', content: systemPrompt },
+              { role: 'system', content: SYSTEM_PROMPT },
               ...messages
             ],
             max_tokens: 500,
