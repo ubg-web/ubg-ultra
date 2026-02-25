@@ -1,234 +1,385 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UBG ELITE</title>
-
-<style>
-* { margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
-
-body {
-background: linear-gradient(180deg,#0a0a14,#111127);
-color:white;
-height:100vh;
-overflow:hidden;
-}
-
-.screen {
-position:absolute;
-width:100%;
-height:100%;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-text-align:center;
-}
-
-h1 { font-size:48px; letter-spacing:5px; margin-bottom:20px; }
-
-button {
-padding:12px 25px;
-margin:10px;
-border:none;
-border-radius:25px;
-background:linear-gradient(45deg,#0077ff,#00d4ff);
-color:white;
-font-weight:bold;
-cursor:pointer;
-transition:.3s;
-}
-
-button:hover { transform:scale(1.08); box-shadow:0 0 20px #00d4ff; }
-
-input {
-padding:10px;
-border-radius:10px;
-border:none;
-margin:5px;
-text-align:center;
-}
-
-#home, #games, #chat, #signup { display:none; }
-
-.gameGrid {
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-gap:15px;
-width:80%;
-max-width:900px;
-}
-
-.gameCard {
-background:#1a1a2e;
-padding:15px;
-border-radius:12px;
-cursor:pointer;
-}
-
-iframe { width:100%; height:85%; border:none; }
-
-#chatBox {
-width:80%;
-max-width:600px;
-height:300px;
-background:#1a1a2e;
-overflow-y:auto;
-padding:10px;
-border-radius:10px;
-margin-bottom:10px;
-text-align:left;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>UBG ULTRA</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Orbitron:700|Roboto">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      color: #fff;
+      overflow: hidden;
+    }
+    body {
+      background: #000;
+      position: relative;
+      min-height: 100vh;
+    }
+    /* Space background canvas */
+    #space {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 0;
+    }
+    .navbar {
+      z-index: 2;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      padding: 16px 0 0 0;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: center;
+      background: rgba(0,0,0,0.6);
+      letter-spacing: 2px;
+    }
+    .navbar a {
+      color: #fff;
+      text-decoration: none;
+      font-family: 'Orbitron', sans-serif;
+      padding: 14px 25px;
+      margin: 0 6px;
+      border-radius: 10px;
+      background: linear-gradient(90deg, rgba(120,40,239,0.6) 0%, rgba(40,150,250,0.6) 100%);
+      transition: background .3s, transform .3s;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    .navbar a:hover {
+      background: linear-gradient(90deg, rgba(120,40,239,1) 0%, rgba(40,150,250,1) 100%);
+      transform: scale(1.08);
+    }
+    .container {
+      z-index: 2;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 90vh;
+      margin-top: 50px;
+      background: none;
+    }
+    .ubg-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3em;
+      background: linear-gradient(90deg, #7828EF 0%, #2896FA 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 30px;
+      letter-spacing: 4px;
+      text-shadow: 0 0 15px #2896FA55;
+    }
+    /* Page hiding system */
+    .page {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 460px;
+      min-width: 320px;
+      padding: 40px 16px;
+      background: rgba(10,10,20,.7);
+      border-radius: 24px;
+      box-shadow: 0 0 40px #2896FA33;
+    }
+    .page.active {
+      display: flex;
+      animation: fadeIn .9s;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    /* SIGNUP PAGE */
+    .signup-form {
+      width: 100%;
+    }
+    .signup-form input {
+      width: 100%;
+      padding: 15px;
+      margin: 8px 0 24px 0;
+      border-radius: 12px;
+      border: none;
+      font-size: 1.2em;
+      background: rgba(50,50,80,0.3);
+      color: #fff;
+      box-shadow: 0 0 10px #7828EF33;
+      outline: none;
+      transition: box-shadow .3s;
+    }
+    .signup-form input:focus {
+      box-shadow: 0 0 16px #2896FA99;
+    }
+    .signup-form label {
+      font-size: 1.05em;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 6px;
+      color: #b0b8ff;
+    }
+    .signup-btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(90deg, #7828EF 0%, #2896FA 100%);
+      color: #fff;
+      font-size: 1.3em;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
+      margin-top: 18px;
+      box-shadow: 0 0 8px #2896FA33;
+      transition: background .3s, transform .3s;
+      cursor: pointer;
+    }
+    .signup-btn:hover {
+      background: linear-gradient(90deg, #A46BED 0%, #07C5FF 100%);
+      transform: scale(1.03);
+      box-shadow: 0 0 18px #7828EF77;
+    }
+    .signup-details {
+      width: 100%;
+      margin-top: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      color: #b0b8ff;
+      font-size: .97em;
+    }
+    .signup-details i {
+      font-size: 1.4em;
+    }
+    /* AI CHATBOT PAGE */
+    .chatbot-box {
+      width: 100%;
+      background: rgba(30,30,40,0.4);
+      border-radius: 16px;
+      box-shadow: 0 0 16px #2896FA33;
+      padding: 24px 12px;
+      margin-bottom: 16px;
+      min-height: 240px;
+      max-height: 400px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .chat-msg {
+      padding: 8px 14px;
+      border-radius: 12px;
+      margin-bottom: 6px;
+      max-width: 80%;
+      font-size: 1.04em;
+      line-height: 1.5em;
+      word-break: break-word;
+    }
+    .chat-msg.user {
+      background: linear-gradient(90deg, #0b3bff 0%, #7845ff 100%);
+      color: #fff;
+      margin-left: auto;
+      box-shadow: 0 0 10px #0b3bff44;
+    }
+    .chat-msg.ai {
+      background: linear-gradient(90deg, #2896FA 0%, #7828EF 100%);
+      color: #fff;
+      margin-right: auto;
+      box-shadow: 0 0 10px #2896FA44;
+    }
+    .chat-input-row {
+      width: 100%;
+      display: flex;
+      gap: 10px;
+    }
+    .chat-input {
+      flex: 1;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      font-size: 1.08em;
+      background: rgba(40,40,70,0.2);
+      color: #fff;
+      outline: none;
+    }
+    .chat-send {
+      padding: 8px 20px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #7828EF 0%, #2896FA 100%);
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px #2896FA33;
+      transition: background .3s, transform .3s;
+    }
+    .chat-send:hover {
+      background: linear-gradient(90deg, #A46BED 0%, #07C5FF 100%);
+      transform: scale(1.03);
+      box-shadow: 0 0 18px #7828EF77;
+    }
+    /* GAME PAGE */
+    .game-edit {
+      color: #fff;
+      font-size: 2em;
+      margin-top: 80px;
+      text-align: center;
+      letter-spacing: 2px;
+    }
+    @media (max-width:600px) {
+      .ubg-logo {
+        font-size: 1.5em;
+      }
+      .container {
+        margin-top: 110px;
+      }
+      .page {
+        padding: 22px 4px;
+        min-width: 0;
+        max-width: initial;
+      }
+    }
+  </style>
 </head>
 <body>
+  <canvas id="space"></canvas>
+  <div class="navbar">
+    <a href="#" onclick="showPage('signup')">Sign Up</a>
+    <a href="#" onclick="showPage('ai')">AI Chatbot</a>
+    <a href="#" onclick="showPage('game')">Game Page</a>
+  </div>
+  <div class="container">
+    <!-- SIGNUP PAGE -->
+    <div class="page active" id="signup-page">
+      <div class="ubg-logo">UBG ULTRA</div>
+      <form class="signup-form" autocomplete="off" onsubmit="event.preventDefault(); alert('Signup simulated!');">
+        <label for="username"><i>👤</i> Username</label>
+        <input id="username" type="text" placeholder="Enter username" required>
+        <label for="email"><i>📧</i> Email</label>
+        <input id="email" type="email" placeholder="Enter email" required>
+        <label for="password"><i>🔒</i> Password</label>
+        <input id="password" type="password" placeholder="Enter password" required>
+        <button class="signup-btn">Sign Up</button>
+      </form>
+      <div class="signup-details">
+        <span><i>✨</i> Secure, lightning-fast sign up system!</span>
+        <span><i>👾</i> Join UBG ULTRA universe.</span>
+        <span><i>🌌</i> Enjoy cosmic fun & chat with AI.</span>
+      </div>
+    </div>
 
-<!-- PASSWORD -->
-<div id="login" class="screen">
-<h1>UBG ELITE</h1>
-<p>Enter Master Password</p>
-<input type="password" id="masterPass">
-<button onclick="checkPassword()">Enter</button>
-</div>
+    <!-- AI CHATBOT PAGE -->
+    <div class="page" id="ai-page">
+      <div class="ubg-logo">UBG ULTRA – AI Chatbot</div>
+      <div class="chatbot-box" id="chatbot-box">
+        <div class="chat-msg ai">Hello! I am the UBG ULTRA AI. How can I help you today?</div>
+      </div>
+      <div class="chat-input-row">
+        <input class="chat-input" id="chat-input" maxlength="200" placeholder="Type your message...">
+        <button class="chat-send" onclick="sendChat()">Send</button>
+      </div>
+    </div>
 
-<!-- SIGN UP -->
-<div id="signup" class="screen">
-<h1>Create Account</h1>
-<input placeholder="Username" id="username">
-<input type="password" placeholder="Password" id="userpass">
-<button onclick="createAccount()">Sign Up</button>
-</div>
-
-<!-- HOME -->
-<div id="home" class="screen">
-<h1>UBG ELITE</h1>
-<button onclick="openGames()">Working Games</button>
-<button onclick="logout()">Remove Access</button>
-<button onclick="openChat()">AI Chat System</button>
-</div>
-
-<!-- GAMES -->
-<div id="games" class="screen">
-<h1>Games</h1>
-<div class="gameGrid" id="gameList"></div>
-<button onclick="goHome()">Back</button>
-</div>
-
-<!-- GAME PLAYER -->
-<div id="player" class="screen" style="display:none;">
-<button onclick="closeGame()">Back</button>
-<iframe id="gameFrame"></iframe>
-</div>
-
-<!-- AI CHAT -->
-<div id="chat" class="screen">
-<h1>Elite AI</h1>
-<div id="chatBox"></div>
-<input id="chatInput" placeholder="Ask something...">
-<button onclick="sendMessage()">Send</button>
-<button onclick="goHome()">Back</button>
-</div>
-
-<script>
-
-/* MASTER PASSWORD */
-function checkPassword(){
-if(document.getElementById("masterPass").value === "052210"){
-document.getElementById("login").style.display="none";
-document.getElementById("signup").style.display="flex";
-} else { alert("Wrong Password"); }
-}
-
-/* ACCOUNT SYSTEM */
-function createAccount(){
-const user = username.value;
-const pass = userpass.value;
-if(user && pass){
-localStorage.setItem("ubgUser", user);
-localStorage.setItem("ubgPass", pass);
-document.getElementById("signup").style.display="none";
-document.getElementById("home").style.display="flex";
-}
-}
-
-/* LOGOUT */
-function logout(){
-localStorage.clear();
-location.reload();
-}
-
-/* NAVIGATION */
-function openGames(){
-home.style.display="none";
-games.style.display="flex";
-}
-
-function openChat(){
-home.style.display="none";
-chat.style.display="flex";
-}
-
-function goHome(){
-games.style.display="none";
-chat.style.display="none";
-player.style.display="none";
-home.style.display="flex";
-}
-
-/* GAMES LIST */
-const gamesArray = [
-{name:"Slope", url:"https://ubg44.github.io/Slope/"},
-{name:"Run 3", url:"https://ubg44.github.io/Run3/"},
-{name:"1v1.LOL", url:"https://1v1lolonline.github.io/"},
-{name:"Retro Bowl", url:"https://ubg44.github.io/retro-bowl/"}
-];
-
-const gameList = document.getElementById("gameList");
-
-gamesArray.forEach(game=>{
-const card = document.createElement("div");
-card.className="gameCard";
-card.innerText=game.name;
-card.onclick=()=>openGame(game.url);
-gameList.appendChild(card);
-});
-
-function openGame(url){
-games.style.display="none";
-player.style.display="flex";
-gameFrame.src=url;
-}
-
-function closeGame(){
-player.style.display="none";
-games.style.display="flex";
-gameFrame.src="";
-}
-
-/* SIMPLE BUILT-IN AI */
-function sendMessage(){
-const input = document.getElementById("chatInput");
-const message = input.value;
-if(!message) return;
-
-chatBox.innerHTML += "<div><b>You:</b> "+message+"</div>";
-
-let reply = "I am Elite AI. Ask about games or strategy.";
-
-if(message.toLowerCase().includes("best game"))
-reply = "Slope and Run 3 are top tier.";
-if(message.toLowerCase().includes("hello"))
-reply = "Welcome to UBG ELITE.";
-if(message.toLowerCase().includes("clash royale"))
-reply = "Focus on elixir management and counterpush timing.";
-
-chatBox.innerHTML += "<div><b>Elite AI:</b> "+reply+"</div>";
-chatBox.scrollTop = chatBox.scrollHeight;
-input.value="";
-}
-
-</script>
-
+    <!-- GAME PAGE -->
+    <div class="page" id="game-page">
+      <div class="ubg-logo">UBG ULTRA – Game Page</div>
+      <div class="game-edit">Edit here.<br><span style="font-size:.7em;color:#aaa;">(Add your games or content!)</span></div>
+    </div>
+  </div>
+  <script>
+    /* NAVIGATION */
+    function showPage(page) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(page+'-page').classList.add('active');
+      // Scroll box to bottom if AI page
+      if(page==='ai') setTimeout(()=>document.getElementById('chatbot-box').scrollTop=99999,100);
+    }
+    /* AI Chatbot simulation */
+    const aiReplies = [
+      "I'm UBG ULTRA's AI! I can help you with games, account info, or anything cosmic 🌌.",
+      "Want to know more about UBG ULTRA? Ask away!",
+      "Need help with signup or password? I'm here for you.",
+      "How would you like to customize your Game Page?",
+      "Feel free to chat! I'm always learning.",
+      "Enjoy the stars! 🌠"
+    ];
+    function sendChat() {
+      const input = document.getElementById('chat-input');
+      const msg = input.value.trim();
+      if(!msg) return;
+      const box = document.getElementById('chatbot-box');
+      box.innerHTML += `<div class="chat-msg user">${msg}</div>`;
+      input.value = '';
+      box.scrollTop = 99999;
+      // AI reply
+      setTimeout(()=> {
+        const reply = aiReplies[Math.floor(Math.random()*aiReplies.length)];
+        box.innerHTML += `<div class="chat-msg ai">${reply}</div>`;
+        box.scrollTop = 99999;
+      }, 700);
+    }
+    /* SPACE BACKGROUND – animated stars */
+    const canvas = document.getElementById('space'), ctx = canvas.getContext('2d');
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    // star config
+    const stars = Array.from({length:120}, () => ({
+      x: Math.random()*canvas.width,
+      y: Math.random()*canvas.height,
+      r: Math.random()*1.3+0.6,
+      vx: (Math.random()-0.5)*0.18,
+      vy: (Math.random()-0.5)*0.18,
+      color: `rgba(${120+Math.random()*130},${100+Math.random()*115},${255},${0.6+Math.random()*0.4})`
+    }));
+    function draw() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      // draw stars
+      for(const s of stars){
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.r,0,2*Math.PI);
+        ctx.fillStyle = s.color;
+        ctx.shadowColor = '#2896FA';
+        ctx.shadowBlur = 8;
+        ctx.fill();
+        // move
+        s.x += s.vx;
+        s.y += s.vy;
+        if(s.x<0) s.x=canvas.width; if(s.x>canvas.width) s.x=0;
+        if(s.y<0) s.y=canvas.height; if(s.y>canvas.height) s.y=0;
+      }
+      // draw some moving comet-like things
+      for(let i=0;i<3;i++){
+        const t = Date.now()/350 + i*150;
+        const x = canvas.width*(.25+i*.25) + Math.sin(t*.11)*120;
+        const y = canvas.height/6 + Math.cos(t*.13)*60 + i*70;
+        ctx.beginPath();
+        ctx.arc(x, y, 11, 0, 2*Math.PI);
+        ctx.fillStyle = 'rgba(255,240,200,0.88)';
+        ctx.shadowColor = '#fff';
+        ctx.shadowBlur = 24;
+        ctx.fill();
+        // draw comet tail
+        for(let j=1;j<=6;j++){
+          ctx.beginPath();
+          ctx.arc(x-j*15, y, 7-j,0,2*Math.PI);
+          ctx.fillStyle = `rgba(120,40,239,${0.25-0.03*j})`;
+          ctx.shadowColor = '#7828EF';
+          ctx.shadowBlur = 10-j;
+          ctx.fill();
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
 </body>
 </html>
