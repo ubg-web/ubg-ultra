@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Join - Unified Brilliance Growth</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { 
+      height: 100%; 
+      font-family: 'Inter', sans-serif; 
+      color: #222; 
+      overflow-x: hidden;
+    }
+    body { 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      min-height: 100vh;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    /* ANIMATED SPACE BACKGROUND (matching UBG ULTRA home page) */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(ellipse at 20% 50%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+                  radial-gradient(ellipse at 80% 80%, rgba(30, 144, 255, 0.15) 0%, transparent 50%),
+                  #0a0e27;
+      z-index: -2;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes drift {
+      0%, 100% { transform: translateY(0px) translateX(0px); }
+      50% { transform: translateY(-20px) translateX(10px); }
+    }
+
+    .space-stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle 3s infinite;
+    }
+
+    .star.small { width: 1px; height: 1px; }
+    .star.medium { width: 2px; height: 2px; }
+    .star.large { width: 3px; height: 3px; }
+
+    .nebula {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.3;
+      animation: drift 20s infinite ease-in-out;
+    }
+
+    .nebula.purple {
+      width: 300px;
+      height: 300px;
+      background: rgba(138, 43, 226, 0.4);
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .nebula.blue {
+      width: 250px;
+      height: 250px;
+      background: rgba(30, 144, 255, 0.4);
+      top: 50%;
+      right: 10%;
+      animation-delay: 2s;
+    }
+
+    .nebula.cyan {
+      width: 280px;
+      height: 280px;
+      background: rgba(0, 255, 255, 0.3);
+      bottom: 10%;
+      left: 20%;
+      animation-delay: 4s;
+    }
+
+    /* Page wrapper */
+    .page {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 24px;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* JOIN PAGE */
+    .join-hero {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(20, 25, 45, 0.85);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      padding: 48px 40px;
+      box-shadow: 0 8px 32px rgba(127, 90, 240, 0.2), 0 0 40px rgba(30, 144, 255, 0.1);
+      border: 1px solid rgba(127, 90, 240, 0.2);
+      text-align: center;
+    }
+
+    .join-title {
+      font-size: 2.2em;
+      font-weight: 800;
+      background: linear-gradient(120deg, #7f5af0 0%, #36cce4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+
+    .join-msg {
+      font-size: 1.05em;
+      color: #a0b0c0;
+      margin-bottom: 32px;
+      font-weight: 500;
+      line-height: 1.6;
+    }
+
+    .back-btn {
+      width: 100%;
+      padding: 14px 24px;
+      border: 1.5px solid rgba(127, 90, 240, 0.3);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #a0b0c0;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      background: rgba(127, 90, 240, 0.1);
+      border-color: #7f5af0;
+      color: #7f5af0;
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 540px) {
+      .page { padding: 30px 16px; }
+      .join-hero { padding: 40px 24px; border-radius: 16px; }
+      .join-title { font-size: 1.8em; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ANIMATED SPACE BACKGROUND -->
+  <div class="space-stars">
+    <div class="nebula purple"></div>
+    <div class="nebula blue"></div>
+    <div class="nebula cyan"></div>
+  </div>
+
+  <!-- JOIN PAGE -->
+  <div class="page">
+    <div class="join-hero">
+      <div class="join-title">Join Failed</div>
+      <div class="join-msg">Reason: Maintenance<br><br>Try again later</div>
+      <button class="back-btn" onclick="window.location.href='/'">← Back</button>
+    </div>
+  </div>
+
+  <script>
+    // Generate stars dynamically
+    function generateStars() {
+      const container = document.querySelector('.space-stars');
+      const starCount = 100;
+      
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        const size = Math.random() > 0.5 ? 'small' : (Math.random() > 0.5 ? 'medium' : 'large');
+        star.className = `star ${size}`;
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = (Math.random() * 3) + 's';
+        container.appendChild(star);
+      }
+    }
+
+    generateStars();
+  </script>
+</body>
+</html>
