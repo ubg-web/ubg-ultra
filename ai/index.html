@@ -320,7 +320,7 @@
     // Check authentication cookie on page load
     function checkAuth() {
       const cookies = document.cookie.split(';');
-      const hasAuth = cookies.some(cookie => cookie.trim().startsWith('ubg_auth='));
+      const hasAuth = cookies.some(cookie => cookie.trim().startsWith('ubg_activated='));
       if (!hasAuth) {
         window.location.href = '/';
       }
