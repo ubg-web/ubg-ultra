@@ -333,10 +333,26 @@
             background: #c82333;
         }
 
-        #gameFrame {
+        .viewer-content {
             flex: 1;
-            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+            position: relative;
+        }
+
+        #gameFrame {
             width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            text-align: center;
+            padding: 20px;
+            font-weight: 600;
         }
 
         footer {
@@ -400,7 +416,9 @@
                 <button class="close" onclick="closeViewer()">✕ Close</button>
             </div>
         </div>
-        <iframe id="gameFrame" sandbox="allow-same-origin allow-scripts allow-forms allow-pointer-lock allow-popups allow-modals allow-top-navigation" allow="autoplay; fullscreen; accelerometer; gyroscope;"></iframe>
+        <div class="viewer-content">
+            <iframe id="gameFrame" sandbox="allow-same-origin allow-scripts allow-forms allow-pointer-lock allow-popups allow-modals allow-top-navigation" allow="autoplay; fullscreen; accelerometer; gyroscope"></iframe>
+        </div>
     </div>
 
     <footer>
@@ -518,8 +536,43 @@
             
             viewer.classList.add('visible');
             
-            const gameUrl = `/games/${encodeURIComponent(game.folder)}/`;
-            frame.src = gameUrl;
+            // Try multiple path variations
+            const paths = [
+                `/games/${encodeURIComponent(game.folder)}/`,
+                `/games/${encodeURIComponent(game.folder)}/index.html`,
+                `./games/${encodeURIComponent(game.folder)}/`,
+                `./games/${encodeURIComponent(game.folder)}/index.html`
+            ];
+            
+            // Start with the first path
+            loadGameWithFallback(frame, paths, 0, game);
+        }
+
+        function loadGameWithFallback(frame, paths, index, game) {
+            if (index >= paths.length) {
+                // All paths failed
+                const content = document.querySelector('.viewer-content');
+                content.innerHTML = `<div class="error-message">❌ Could not load game: ${game.name}<br><br>The game folder may not exist or is misconfigured.</div>`;
+                return;
+            }
+
+            const path = paths[index];
+            frame.src = path;
+
+            // Check if the frame loaded successfully after a short delay
+            setTimeout(() => {
+                try {
+                    // This will throw if we can't access the frame content (different origin or not loaded)
+                    const frameDoc = frame.contentDocument || frame.contentWindow?.document;
+                    if (!frameDoc || frameDoc.documentElement.innerHTML.includes('404') || frameDoc.documentElement.innerHTML.includes('not found')) {
+                        loadGameWithFallback(frame, paths, index + 1, game);
+                    }
+                } catch (e) {
+                    // Frame is from different origin or hasn't loaded, try next path
+                    console.log(`Path ${index} failed, trying next...`);
+                    loadGameWithFallback(frame, paths, index + 1, game);
+                }
+            }, 500);
         }
 
         function closeViewer() {
